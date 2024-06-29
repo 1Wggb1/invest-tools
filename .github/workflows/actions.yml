@@ -4,9 +4,14 @@ on:
   workflow_dispatch:
       inputs:
         ticker:
-          description: "Tiker da ação (ex: itsa4):"
-        cotation_day_ago:
+          description: "Ticker da ação (ex: itsa4):"
+          required: true
+        quote_day_ago:
           description: "Cotação de quantos dias atrás (ex: 3, 4):"
+          required: true
+        ticker_diff:
+          description: "Diferença entre os tickers: (ex: 0,10. Irá encontra a diferença em reais entre o ticker digitado acima os outros tipos PN, ON, UNIT)"
+          required: true
 
 jobs:
   build:
@@ -28,10 +33,10 @@ jobs:
           pip install -r requirements.txt
 
       - name: Execute main.py
-        run: TICKER=${{ github.event.inputs.ticker }} DAYS_AGO=${{github.event.inputs.cotation_day_ago}} python main.py
+        run: TICKER=${{ github.event.inputs.ticker }} DAYS_AGO=${{github.event.inputs.quote_day_ago}} TICKER_DIFF=${{github.event.inputs.ticker_diff}} python main.py
 
       - name: Show dispatch inputs
-        run: echo "Workflow dispatch inputs ${{ github.event.inputs.ticker }} ${{ github.event.inputs.cotation_day_ago }}"
+        run: echo "Workflow dispatch inputs ${{ github.event.inputs.ticker }} ${{ github.event.inputs.quote_day_ago }} ${{github.event.inputs.ticker_diff}}"
         
       - name: Commit and push files
         run: |
