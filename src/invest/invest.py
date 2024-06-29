@@ -31,7 +31,12 @@ class Invest:
             'ticker': (None, ticker),
             'type': (None, -10000),
         }
-        content = requests.get(StatusInvest.STATUS_INVEST_URL, headers=Invest.FAKE_AGENT_HEADER, files=form_data).content
+        headers = {
+            "User-Agent": Invest.FAKE_AGENT_HEADER.get("User-Agent"),
+            "sec-fetch-mode": "cors",
+            "sec-fetch-site": "same-origin"
+        }
+        content = requests.get(StatusInvest.STATUS_INVEST_URL, headers=headers, files=form_data).content
         print(f"{content}")
         return Invest.parse_results_to_json(content)
 
