@@ -6,4 +6,4 @@ if __name__ == "__main__":
     ticker_diff = os.environ['TICKER_DIFF']
     days_ago = os.environ['DAYS_AGO']
 
-    Investidor10Invest(ticker, ticker_diff, days_ago).find_ticker_with_diff()
+    Investidor10Invest(ticker, float(ticker_diff), days_ago).find_ticker_with_diff()
