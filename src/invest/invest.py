@@ -32,6 +32,7 @@ class Invest:
             'type': (None, -10000),
         }
         content = requests.get(StatusInvest.STATUS_INVEST_URL, headers=Invest.FAKE_AGENT_HEADER, files=form_data).content
+        print(f"{content}")
         return Invest.parse_results_to_json(content)
 
     class AssetType(Enum):
