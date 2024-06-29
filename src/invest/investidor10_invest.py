@@ -67,10 +67,7 @@ class Investidor10Invest(Invest):
             "result": result["real"]
         }
         if asset_type == Invest.AssetType.UNIT:
-            composition = self.find_unit_composition(ticker)
-            if composition and isinstance(composition, list):
-                if len(composition):
-                    created_result["unit_composition"] = Invest.get_key_or_default(composition[0], "unitCompare")
+            created_result["unit_composition"] = Invest.UNIT_COMPOSITION.get_value(ticker).value
         return created_result
 
     @staticmethod

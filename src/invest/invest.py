@@ -44,6 +44,31 @@ class Invest:
         print(f"{content}")
         return Invest.parse_results_to_json(content)
 
+    class UNIT_COMPOSITION(Enum):
+        ALUP11 = {"UNIT": "ALUP11", "ON": 1, "PN": 2}
+        BRBI11 = {"UNIT": "BRBI11", "ON": 1, "PN": 2}
+        BPAC11 = {"UNIT": "BPAC11", "ON": 1, "PN": 2}
+        ENGI11 = {"UNIT": "ENGI11", "ON": 1, "PN": 4}
+        IGTI11 = {"UNIT": "IGTI11", "ON": 1, "PN": 2}
+        KLBN11 = {"UNIT": "KLBN11", "ON": 1, "PN": 4}
+        PPLA11 = {"UNIT": "PPLA11", "ON": 1, "PN": 2}
+        RNEW11 = {"UNIT": "RNEW11", "ON": 1, "PN": 2}
+        RBNS11 = {"UNIT": "RBNS11", "ON": 1, "PN": 2}
+        SAPR11 = {"UNIT": "SAPR11", "ON": 1, "PN": 4}
+        SANB11 = {"UNIT": "SANB11", "ON": 1, "PN": 1}
+        TAEE11 = {"UNIT": "TAEE11", "ON": 1, "PN": 2}
+
+        @classmethod
+        def get_value(cls, ticker: str):
+            for enum_option in cls.values():
+                if enum_option.name == ticker.upper():
+                    return enum_option
+            return None
+
+        @classmethod
+        def values(cls):
+            return list(cls)
+
     class AssetType(Enum):
         ON = 3
         PN = 4
@@ -79,7 +104,7 @@ class Invest:
 
         @classmethod
         def values(cls):
-            return [cls.ON, cls.PN, cls.UNIT]
+            return list(cls)
 
         @classmethod
         def values_except(cls, exclusive_value):
