@@ -1,6 +1,8 @@
 import json
-
 import requests
+from enum import Enum
+
+from src.invest.status_invest import StatusInvest
 
 
 class Invest:
@@ -12,14 +14,19 @@ class Invest:
 
     def search(self, site_url):
         content = requests.get(site_url, headers=Invest.FAKE_AGENT_HEADER).content
-        return Invest.__parse_results_to_json(content)
+        return Invest.parse_results_to_json(content)
 
     @staticmethod
-    def __parse_results_to_json(results):
+    def parse_results_to_json(results):
         return {} if not results else json.loads(results)
-    
 
-    from enum import Enum
+    def find_unit_composition(self, ticker):
+        form_data = {
+            'ticker': (None, ticker),
+            'type': (None, -10000),
+        }
+        content = requests.get(StatusInvest.STATUS_INVEST_URL, headers=Invest.FAKE_AGENT_HEADER, files=form_data).content
+        return Invest.parse_results_to_json(content)
 
     class AssetType(Enum):
         ON = 3
@@ -42,8 +49,8 @@ class Invest:
                 return ""
             letters = [s for s in ticker if not s.isdigit()]
             ticker_letters = ""
-            for lettter in letters:
-                ticker_letters += lettter
+            for letter in letters:
+                ticker_letters += letter
             return ticker_letters
 
         @classmethod
@@ -63,7 +70,3 @@ class Invest:
             values = cls.values()
             values.remove(exclusive_value)
             return values
-
-
-if __name__ == "__main__":
-    print(Invest.AssetType.get_value("itsa11"))
