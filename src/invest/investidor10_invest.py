@@ -22,13 +22,13 @@ class Investidor10Invest(Invest):
         tickets_except_main_ticker = Invest.AssetType.values_except(asset_type)
 
         final_result = {}
-        final_result[self.ticker] = self.__create_result(self.__find_quote(self.ticker), asset_type)
+        final_result[self.ticker] = self.__create_result(self.__find_quote(self.ticker), self.ticker, asset_type)
         main_ticker_result = final_result[self.ticker]["result"]
         for enum_option in tickets_except_main_ticker:
             other_ticket = f"{Invest.AssetType.extract_ticker(self.ticker)}{enum_option.value}"
             quote = self.__find_quote(other_ticket)
             if quote:
-                final_result[other_ticket] = self.__create_result(quote, enum_option)
+                final_result[other_ticket] = self.__create_result(quote, other_ticket, enum_option)
                 other_ticket_result = final_result[other_ticket]["result"]
                 final_result[
                     f"{other_ticket} minus {self.ticker} greater than equals {self.tickets_diff}"] = self.do_find_diff(
@@ -46,7 +46,7 @@ class Investidor10Invest(Invest):
             main_ticker_price = main_result[i]["price"]
             other_ticker_price = other_result[i]["price"]
             price_diff = other_ticker_price - main_ticker_price
-            if price_diff >= self.tickets_diff:
+            if abs(price_diff) >= self.tickets_diff:
                 final_result[main_result[i]["created_at"]] = {
                     "price_diff": price_diff,
                     main_ticker: main_result[i],
@@ -60,17 +60,17 @@ class Investidor10Invest(Invest):
     def __find_quote(self, ticker):
         return self.search(Investidor10Invest.INVESTIDOR_10_URL + f"/{ticker}/{self.days_ago}/true/real")
 
-    def __create_result(self, result, asset_type: Invest.AssetType):
+    def __create_result(self, result, ticker, asset_type: Invest.AssetType):
         created_result = {
             "request_date_time": Investidor10Invest.get_formatted_datetime(),
             "quote_days_ago": self.days_ago,
             "result": result["real"]
         }
         if asset_type == Invest.AssetType.UNIT:
-            composition = self.find_unit_composition(self.ticker)
+            composition = self.find_unit_composition(ticker)
             if composition and isinstance(composition, list):
                 if len(composition):
-                    created_result["unit_composition"] = composition[0]["unitCompare"]
+                    created_result["unit_composition"] = Invest.get_key_or_default(composition[0], "unitCompare")
         return created_result
 
     @staticmethod

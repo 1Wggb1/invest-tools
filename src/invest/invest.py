@@ -17,6 +17,12 @@ class Invest:
         return Invest.parse_results_to_json(content)
 
     @staticmethod
+    def get_key_or_default(value, field: str):
+        if isinstance(value, dict):
+            return value.get(field)
+        return ""
+
+    @staticmethod
     def parse_results_to_json(results):
         return {} if not results else json.loads(results)
 
