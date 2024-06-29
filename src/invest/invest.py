@@ -34,7 +34,11 @@ class Invest:
         headers = {
             "User-Agent": Invest.FAKE_AGENT_HEADER.get("User-Agent"),
             "sec-fetch-mode": "cors",
-            "sec-fetch-site": "same-origin"
+            "sec-fetch-site": "same-origin",
+            "sec-fetch-dest": "empty",
+            "x-requested-with": "XMLHttpRequest",
+            "sec-ch-ua-platform": "Windows",
+            "origin": "https://statusinvest.com.br"
         }
         content = requests.get(StatusInvest.STATUS_INVEST_URL, headers=headers, files=form_data).content
         print(f"{content}")
