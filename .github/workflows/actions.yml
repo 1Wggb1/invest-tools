@@ -12,7 +12,7 @@ on:
           required: true
           type: string
         ticker_diff:
-          description: "Diferença entre os tickers: (ex: 0,10. Irá encontra a diferença em reais entre o ticker digitado acima os outros tipos PN, ON, UNIT)"
+          description: "Diferença entre os tickers: (ex: 0.10. Irá encontrar a diferença em reais entre o ticker digitado acima os outros tipos PN, ON, UNIT)"
           required: true
           type: number
 
@@ -36,7 +36,11 @@ jobs:
           pip install -r requirements.txt
 
       - name: Execute main.py
-        run: TICKER=${{ github.event.inputs.ticker }} DAYS_AGO=${{github.event.inputs.quote_day_ago}} TICKER_DIFF=${{github.event.inputs.ticker_diff}} python main.py
+        run: python main.py
+        env:
+          TICKER: ${{ github.event.inputs.ticker }}
+          DAYS_AGO: ${{ github.event.inputs.quote_day_ago }}
+          TICKER_DIFF: ${{ github.event.inputs.ticker_diff }}
 
       - name: Show dispatch inputs
         run: echo "Workflow dispatch inputs ${{ github.event.inputs.ticker }} ${{ github.event.inputs.quote_day_ago }} ${{github.event.inputs.ticker_diff}}"
